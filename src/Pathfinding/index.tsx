@@ -1,10 +1,35 @@
 import { useEffect, useState } from "react";
+import { astar, calculateNeighbors } from "./Algorithms/astar";
 import { INode, Node } from "./Node";
 
 import "./Pathfinding.css";
 
 export const Pathfinding = () => {
   const [nodes, setNodes] = useState<INode[][]>([]);
+  const [action, setAction] = useState<"setWallNode" | "calcNeighbors">(
+    "setWallNode"
+  );
+
+  const startNode = {
+    x: 15,
+    y: 10,
+    isStartNode: true,
+    isFinishNode: false,
+    isWallNode: false,
+    visited: true,
+    inOpenSet: true,
+    isCurrent: false,
+  };
+  const endNode = {
+    x: 40,
+    y: 10,
+    isStartNode: false,
+    isFinishNode: true,
+    isWallNode: false,
+    visited: false,
+    inOpenSet: false,
+    isCurrent: false,
+  };
 
   useEffect(() => {
     const newNodes: INode[][] = [];
@@ -18,6 +43,9 @@ export const Pathfinding = () => {
           isStartNode: row === 10 && column === 15,
           isFinishNode: row === 10 && column === 40,
           isWallNode: false,
+          visited: false,
+          inOpenSet: false,
+          isCurrent: false,
         };
 
         newRow.push(newNode);
@@ -29,11 +57,11 @@ export const Pathfinding = () => {
     setNodes(newNodes);
   }, []);
 
-  const setWallNode = (node: INode) => {
+  const setNode = (node: INode, key: "isWallNode", value: any) => {
     const newNodes = [...nodes];
     const currentNode = newNodes[node.y][node.x];
-    currentNode.isWallNode =
-      currentNode.isStartNode || currentNode.isFinishNode ? false : true;
+    currentNode[key] =
+      !(currentNode.isStartNode || currentNode.isFinishNode) && value;
 
     setNodes(newNodes);
   };
@@ -50,8 +78,11 @@ export const Pathfinding = () => {
                   key={`${node.x},${node.y}`}
                   {...{ node }}
                   onPressNode={(n) => {
-                    setWallNode(n);
-                    console.log(n);
+                    if (action === "setWallNode") {
+                      setNode(n, "isWallNode", true);
+                    } else {
+                      calculateNeighbors(n, nodes, setNodes);
+                    }
                   }}
                 />
               ))}
@@ -59,6 +90,18 @@ export const Pathfinding = () => {
           ))}
         </tbody>
       </table>
+      <button
+        onClick={() =>
+          action === "setWallNode"
+            ? setAction("calcNeighbors")
+            : setAction("setWallNode")
+        }
+      >
+        Alterar
+      </button>
+      <button onClick={() => astar(startNode, endNode, nodes, setNodes)}>
+        Começar
+      </button>
     </div>
   );
 };

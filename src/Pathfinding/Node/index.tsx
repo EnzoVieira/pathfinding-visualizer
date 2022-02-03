@@ -6,11 +6,14 @@ export interface INode {
   isStartNode: boolean;
   isFinishNode: boolean;
   isWallNode: boolean;
+  visited: boolean;
+  inOpenSet: boolean;
+  isCurrent: boolean;
 }
 
 interface IProps {
   node: INode;
-  onPressNode: (node: INode) => void;
+  onPressNode?: (node: INode) => void;
 }
 
 export const Node = ({ node, onPressNode }: IProps) => {
@@ -21,8 +24,13 @@ export const Node = ({ node, onPressNode }: IProps) => {
     : "";
   return (
     <td
-      className={`node ${extraClassNode} ${node.isWallNode ? "wall-node" : ""}`}
-      onClick={() => onPressNode(node)}
+      className={`node ${extraClassNode} ${
+        node.isWallNode ? "wall-node" : ""
+      } ${node.inOpenSet ? "to-visit-node" : ""}
+      ${node.visited ? "visited-node" : ""}
+      ${node.isCurrent ? "current-node" : ""}
+      `}
+      onClick={() => onPressNode && onPressNode(node)}
     ></td>
   );
 };

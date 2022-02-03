@@ -15,3 +15,15 @@
 .wall-node {
   background-color: black;
 }
+
+.to-visit-node {
+  background-color: dodgerblue;
+}
+
+.visited-node {
+  background-color: darkorange;
+}
+
+.current-node {
+  background-color: goldenrod;
+}
