@@ -12,25 +12,25 @@ export const Pathfinding = () => {
 
   const startNode = {
     cost: 0,
-    x: 15,
-    y: 10,
+    x: 0,
+    y: 0,
     isStartNode: true,
     isFinishNode: false,
     isWallNode: false,
     visited: true,
     inOpenSet: true,
-    isCurrent: false,
+    isStep: false,
   };
   const endNode = {
     cost: 0,
-    x: 40,
-    y: 10,
+    x: 49,
+    y: 14,
     isStartNode: false,
     isFinishNode: true,
     isWallNode: false,
     visited: false,
     inOpenSet: false,
-    isCurrent: false,
+    isStep: false,
   };
 
   useEffect(() => {
@@ -43,12 +43,12 @@ export const Pathfinding = () => {
           cost: 0,
           x: column,
           y: row,
-          isStartNode: row === 10 && column === 15,
-          isFinishNode: row === 10 && column === 40,
+          isStartNode: row === startNode.y && column === startNode.x,
+          isFinishNode: row === endNode.y && column === endNode.x,
           isWallNode: false,
           visited: false,
           inOpenSet: false,
-          isCurrent: false,
+          isStep: false,
         };
 
         newRow.push(newNode);
@@ -60,7 +60,7 @@ export const Pathfinding = () => {
     setNodes(newNodes);
   }, []);
 
-  const setNode = (node: INode, key: "isWallNode", value: any) => {
+  const setNode = (node: INode, key: "isWallNode" | "isStep", value: any) => {
     const newNodes = [...nodes];
     const currentNode = newNodes[node.y][node.x];
     currentNode[key] =
@@ -102,7 +102,9 @@ export const Pathfinding = () => {
       >
         Alterar
       </button>
-      <button onClick={() => astar(startNode, endNode, nodes, setNodes)}>
+      <button
+        onClick={() => astar(startNode, endNode, nodes, setNodes, setNode)}
+      >
         Começar
       </button>
     </div>

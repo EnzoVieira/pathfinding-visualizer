@@ -18,12 +18,14 @@
 
 .to-visit-node {
   background-color: dodgerblue;
+  transition: 0.5s;
 }
 
 .visited-node {
   background-color: darkorange;
+  transition: 0.5s;
 }
 
-.current-node {
-  background-color: goldenrod;
+.step-node {
+  background-color: blueviolet;
 }

@@ -9,7 +9,7 @@ export interface INode {
   isWallNode: boolean;
   visited: boolean;
   inOpenSet: boolean;
-  isCurrent: boolean;
+  isStep: boolean;
 }
 
 interface IProps {
@@ -29,7 +29,7 @@ export const Node = ({ node, onPressNode }: IProps) => {
         node.isWallNode ? "wall-node" : ""
       } ${node.inOpenSet ? "to-visit-node" : ""}
       ${node.visited ? "visited-node" : ""}
-      ${node.isCurrent ? "current-node" : ""}
+      ${node.isStep ? "step-node" : ""}
       `}
       onClick={() => onPressNode && onPressNode(node)}
     ></td>
