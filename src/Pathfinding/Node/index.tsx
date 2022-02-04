@@ -1,6 +1,7 @@
 import "./Node.css";
 
 export interface INode {
+  cost: number;
   x: number;
   y: number;
   isStartNode: boolean;

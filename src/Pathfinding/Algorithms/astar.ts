@@ -11,26 +11,33 @@ const astar = (
 
   const cameFrom = [{ current: startNode, previous: startNode }];
 
-  console.log(endNode);
-  myLoop(endNode, openSet, closeSet, grid, updateGrid);
+  myLoop(startNode, endNode, openSet, closeSet, cameFrom, grid, updateGrid);
 
   return "Não há caminho";
 };
 
 const myLoop = (
+  startNode: INode,
   endNode: INode,
   openSet: INode[],
   closeSet: INode[],
+  cameFrom: { current: INode; previous: INode }[],
   grid: INode[][],
   updateGrid: (e: INode[][]) => void
 ) => {
   setTimeout(() => {
+    openSet.sort((a, b) => {
+      return a.cost - b.cost;
+    });
+
     let current = openSet.shift() as INode;
     closeSet.push(current);
     current.visited = true;
 
+    console.log(current, endNode);
     if (current.x === endNode.x && current.y === endNode.y) {
       console.log("Terminou");
+      console.log(cameFrom);
       return;
     }
 
@@ -39,23 +46,23 @@ const myLoop = (
     neighbors
       .filter(
         (node) =>
-          !node.isStartNode &&
-          !node.isFinishNode &&
-          !node.isWallNode &&
-          !closeSet.includes(node)
+          !node.isStartNode && !node.isWallNode && !closeSet.includes(node)
       )
       .forEach((node) => {
         const nodeAlreadyVisited = openSet.includes(node);
         node.inOpenSet = true;
 
         if (!nodeAlreadyVisited) {
-          openSet.push(node);
+          // openSet.push(node);
+          openSet.push(euristic(startNode, endNode, node));
+          cameFrom.push({ current, previous: node });
+          // console.log(euristic(startNode, endNode, node));
         }
       });
 
     updateGrid(grid);
 
-    myLoop(endNode, openSet, closeSet, grid, updateGrid);
+    myLoop(startNode, endNode, openSet, closeSet, cameFrom, grid, updateGrid);
   }, 2);
 };
 
@@ -78,16 +85,34 @@ export const calculateNeighbors = (
   if (y > 0 && x > 0) neighbors.push(grid[y - 1][x - 1]);
   if (y < 14 && x > 0) neighbors.push(grid[y + 1][x - 1]);
 
-  // neighbors.forEach((node) => {
-  //   node.inOpenSet =
-  //     !node.isStartNode && !node.isFinishNode && !node.isWallNode;
-  // });
-
   const newNodes = [...grid];
 
   onCallBack(newNodes);
 
   return neighbors;
+};
+
+const euristic = (startNode: INode, endNode: INode, currentNode: INode) => {
+  const g =
+    Math.abs(endNode.x - currentNode.x) + Math.abs(endNode.y - currentNode.y);
+  const h =
+    Math.abs(startNode.x - currentNode.x) +
+    Math.abs(startNode.y - currentNode.y);
+
+  const f = g + h;
+
+  currentNode.cost = f;
+
+  return currentNode;
+};
+
+const reconstructPath = (
+  cameFrom: { current: INode; previous: INode }[],
+  current: INode
+) => {
+  const totalPath = [current];
+
+  // while (Object.keys(cameFrom).includes(current)) {}
 };
 
 export { astar };

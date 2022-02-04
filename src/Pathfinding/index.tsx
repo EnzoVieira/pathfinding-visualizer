@@ -11,6 +11,7 @@ export const Pathfinding = () => {
   );
 
   const startNode = {
+    cost: 0,
     x: 15,
     y: 10,
     isStartNode: true,
@@ -21,6 +22,7 @@ export const Pathfinding = () => {
     isCurrent: false,
   };
   const endNode = {
+    cost: 0,
     x: 40,
     y: 10,
     isStartNode: false,
@@ -38,6 +40,7 @@ export const Pathfinding = () => {
 
       for (let column = 0; column < 50; column++) {
         const newNode = {
+          cost: 0,
           x: column,
           y: row,
           isStartNode: row === 10 && column === 15,
