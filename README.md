@@ -4,6 +4,8 @@ This is a pathfinding visualizer project built with React to practice the A* alg
 
 ## Demo
 
+https://user-images.githubusercontent.com/73349819/229625490-906442d4-0742-4701-8e91-abbedac08dd6.mp4
+
 ## Features
 
 - [x] Visualize the A\* algorithm in action
